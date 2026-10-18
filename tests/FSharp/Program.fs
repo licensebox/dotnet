@@ -29,6 +29,9 @@ let run () : obj =
         | "sign_in" -> box (c.SignIn(3.0))
         | "require" -> box (c.Require(if r.ContainsKey("module") then s "module" else "core"))
         | "repeat" -> c.Require("core") |> ignore; box (c.Require("core"))
+        | "heartbeat" -> box (c.Heartbeat(if r.ContainsKey("module") then s "module" else "core"))
+        | "heartbeat-repeat" -> c.Heartbeat("core") |> ignore; box (c.Heartbeat("core"))
+        | "heartbeat-after-require" -> c.Require("core") |> ignore; box (c.Heartbeat("core"))
         | "logout" -> c.Logout(); null
         | "modules" -> box (c.Modules())
         | "requests" -> box (c.Requests())

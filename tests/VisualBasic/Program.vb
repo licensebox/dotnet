@@ -38,6 +38,9 @@ Module Program
                 Case "sign_in" : Return c.SignIn(3)
                 Case "require" : Return c.Require(If(r.ContainsKey("module"),S("module"),"core"))
                 Case "repeat" : c.Require("core") : Return c.Require("core")
+                Case "heartbeat" : Return c.Heartbeat(If(r.ContainsKey("module"),S("module"),"core"))
+                Case "heartbeat-repeat" : c.Heartbeat("core") : Return c.Heartbeat("core")
+                Case "heartbeat-after-require" : c.Require("core") : Return c.Heartbeat("core")
                 Case "logout" : c.Logout() : Return Nothing
                 Case "modules" : Return c.Modules()
                 Case "requests" : Return c.Requests()

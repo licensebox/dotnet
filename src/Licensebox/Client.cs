@@ -120,6 +120,8 @@ public class Client : IDisposable
         }
     }
     public JsonElement Lease()=>Call("lease");
+    /// Explicit bounded renewal without interactive sign-in or automatic timers.
+    public JsonElement Heartbeat(string module)=>Call("heartbeat",new{module=Argument(module)});
     public JsonElement Require(string module)=>Call("require",new{module=Argument(module)});
     public JsonElement Status()=>Call("status");
     public JsonElement SignIn(double timeoutSeconds=0) {if(!double.IsFinite(timeoutSeconds))throw new ArgumentException("invalid timeout");return Call("sign_in",new{timeout=timeoutSeconds});}

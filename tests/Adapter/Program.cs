@@ -14,6 +14,9 @@ static object? Run(JsonObject r)
     {
         case "lease":return c.Lease();case "status":return c.Status();case "sign_in":return c.SignIn(3);
         case "require":return c.Require(r.ContainsKey("module")?S("module"):"core");
+        case "heartbeat":return c.Heartbeat(r.ContainsKey("module")?S("module"):"core");
+        case "heartbeat-repeat":c.Heartbeat("core");return c.Heartbeat("core");
+        case "heartbeat-after-require":c.Require("core");return c.Heartbeat("core");
         case "repeat":c.Require("core");return c.Require("core");case "logout":c.Logout();return null;
         case "modules":return c.Modules();case "requests":return c.Requests();case "request":return c.RequestAccess(["export"],"café – test");
         case "access-link":return c.AccessLink();case "record":c.Record("export",true,.125);c.Record("export",false,.025);return null;
