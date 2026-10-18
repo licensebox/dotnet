@@ -39,9 +39,7 @@ Build a local package with `dotnet pack src/Licensebox/Licensebox.csproj -c Rele
 -o packages`, then add `Licensebox` 0.1.1 from that package directory to the
 consumer. NuGet registry publication is separate. Results are owned
 `System.Text.Json.JsonElement` values. Catch `LicenseboxException` and inspect
-`Code`. Use `using`/`Dispose`; calls and disposal are synchronized. F# and VB.NET
-can consume the same assembly; their language-specific validation is tracked in
-the roadmap.
+`Code`. Use `using`/`Dispose`; calls and disposal are synchronized. F# and VB.NET consume the same assembly and each run the shared licensing suite in CI.
 
 
 Create one client per process. The complete API includes lease, require, local
