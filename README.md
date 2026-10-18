@@ -36,7 +36,7 @@ client.Require("export");
 ```
 
 Build a local package with `dotnet pack src/Licensebox/Licensebox.csproj -c Release
--o packages`, then add `Licensebox` 0.1.0 from that package directory to the
+-o packages`, then add `Licensebox` 0.1.1 from that package directory to the
 consumer. NuGet registry publication is separate. Results are owned
 `System.Text.Json.JsonElement` values. Catch `LicenseboxException` and inspect
 `Code`. Use `using`/`Dispose`; calls and disposal are synchronized. F# and VB.NET
