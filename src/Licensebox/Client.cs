@@ -13,14 +13,14 @@ public sealed class Config(string product,IReadOnlyDictionary<string,string> key
 {
     public string Product { get; }=product;
     public IReadOnlyDictionary<string,string> Keys { get; }=keys;
-    public string Version { get; init; }="";
-    public string? Server { get; init; }
-    public string? Directory { get; init; }
-    public Action<string,string>? OnSignIn { get; init; }
-    public Func<bool>? Cancelled { get; init; }
+    public string Version { get; set; }="";
+    public string? Server { get; set; }
+    public string? Directory { get; set; }
+    public Action<string,string>? OnSignIn { get; set; }
+    public Func<bool>? Cancelled { get; set; }
     /// Trusted platform/test seams. Never accept a binding from an end user.
-    public Func<string>? MachineBinding { get; init; }
-    public Func<double>? Clock { get; init; }
+    public Func<string>? MachineBinding { get; set; }
+    public Func<double>? Clock { get; set; }
 }
 
 /// Owns a C >=0.2 client; use using/Dispose. Linux is the validated platform.

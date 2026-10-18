@@ -84,3 +84,10 @@ and [integration docs](https://licensebox.dev/docs). Administration remains in
 the [Go CLI](https://github.com/licensebox/go) and web console.
 
 MIT. Copyright © 2026 [Vijai Kumar](https://meshing.engineer).
+
+## F# and Visual Basic
+
+The same managed assembly exposes the complete API to C#, F# and VB.NET.
+See `examples/Main.fsx` and `examples/Main.vb`. Use F# `use` or VB `Using` to
+release the client. The F# and VB adapters are compiled and each runs the shared
+69-case Linux suite in CI; no extra native implementation is involved.
