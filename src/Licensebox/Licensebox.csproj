@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
-    <PackageId>Licensebox</PackageId><Version>0.1.1</Version><Authors>Vijai Kumar</Authors>
+    <PackageId>Licensebox</PackageId><Version>0.2.0</Version><Authors>Vijai Kumar</Authors>
     <Description>Machine-bound Licensebox application licensing for .NET</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression><RepositoryUrl>https://github.com/licensebox/dotnet</RepositoryUrl>
   </PropertyGroup>
