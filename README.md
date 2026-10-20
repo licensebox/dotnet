@@ -4,7 +4,7 @@ Application licensing backed by the shared C core: native machine identity,
 email sign-in, signed offline leases, silent renewal, module access, approval
 requests and usage reporting. Linux is the initial runtime target.
 
-Requirements: .NET 10; no managed runtime dependencies; Licensebox C >=0.2.0, OpenSSL 3, libcurl 7.85+ and
+Requirements: .NET 10; no managed runtime dependencies; Licensebox C >=0.5.0, OpenSSL 3.5+, libcurl 7.85+ and
 json-c. The native dependency is pinned in `native-version.txt` and updated by
 the tested contract-sync workflow. No native code is downloaded at runtime.
 
@@ -36,7 +36,7 @@ client.Require("export");
 ```
 
 Build a local package with `dotnet pack src/Licensebox/Licensebox.csproj -c Release
--o packages`, then add `Licensebox` 0.2.0 from that package directory to the
+-o packages`, then add `Licensebox` 0.3.0 from that package directory to the
 consumer. NuGet registry publication is separate. Results are owned
 `System.Text.Json.JsonElement` values. Catch `LicenseboxException` and inspect
 `Code`. Use `using`/`Dispose`; calls and disposal are synchronized. F# and VB.NET consume the same assembly and each run the shared licensing suite in CI.
