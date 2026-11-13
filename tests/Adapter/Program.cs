@@ -9,7 +9,7 @@ static object? Run(JsonObject r)
     if(op=="derive")return Client.DeriveBinding(product,S("source"),S("raw_id"));
     if(op=="native")return Client.NativeBinding(product);
     if(op=="verify")return Client.VerifyLease(S("token"),product,keys,r["now"]!.GetValue<double>());
-    using var c=new Client(new Config(product,keys){Server=S("server"),Directory=S("directory"),Version="conformance",Clock=()=>r["now"]!.GetValue<double>(),MachineBinding=()=>S("binding"),OnSignIn=(_,_)=>{}});
+    using var c=new Client(new Config(product,keys){Server=S("server"),Directory=S("directory"),EnrolToken=r["enrol_token"]?.GetValue<string>(),Version="conformance",Clock=()=>r["now"]!.GetValue<double>(),MachineBinding=()=>S("binding"),OnSignIn=(_,_)=>{}});
     switch(op)
     {
         case "lease":return c.Lease();case "status":return c.Status();case "sign_in":return c.SignIn(3);
@@ -19,6 +19,7 @@ static object? Run(JsonObject r)
         case "heartbeat-after-require":c.Require("core");return c.Heartbeat("core");
         case "repeat":c.Require("core");return c.Require("core");case "logout":c.Logout();return null;
         case "modules":return c.Modules();case "requests":return c.Requests();case "request":return c.RequestAccess(["export"],"café – test");
+        case "enrol":return c.Enrol(S("token"));case "checkout":return c.Checkout(S("module"));case "checkin":c.Checkin(S("module"));return null;
         case "access-link":return c.AccessLink();case "record":c.Record("export",true,.125);c.Record("export",false,.025);return null;
         default:throw new ArgumentException("unknown operation");
     }

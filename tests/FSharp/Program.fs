@@ -18,6 +18,7 @@ let run () : obj =
         let cfg = Config(product,keys)
         cfg.Server <- s "server"
         cfg.Directory <- s "directory"
+        if r.ContainsKey("enrol_token") then cfg.EnrolToken <- s "enrol_token"
         cfg.Version <- "conformance"
         cfg.Clock <- Func<double>(fun () -> r["now"].GetValue<double>())
         cfg.MachineBinding <- Func<string>(fun () -> s "binding")
@@ -37,6 +38,9 @@ let run () : obj =
         | "requests" -> box (c.Requests())
         | "request" -> box (c.RequestAccess(["export"],"café – test"))
         | "access-link" -> box (c.AccessLink())
+        | "enrol" -> box (c.Enrol(s "token"))
+        | "checkout" -> box (c.Checkout(s "module"))
+        | "checkin" -> c.Checkin(s "module"); null
         | "record" -> c.Record("export",true,0.125); c.Record("export",false,0.025); null
         | _ -> failwith "unknown operation"
 let answer = Dictionary<string,obj>()

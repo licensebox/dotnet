@@ -26,6 +26,7 @@ Module Program
         Dim cfg As New Config(product,keys)
         cfg.Server = S("server")
         cfg.Directory = S("directory")
+        If r.ContainsKey("enrol_token") Then cfg.EnrolToken = S("enrol_token")
         cfg.Version = "conformance"
         cfg.Clock = Function() r("now").GetValue(Of Double)()
         cfg.MachineBinding = Function() S("binding")
@@ -46,6 +47,9 @@ Module Program
                 Case "requests" : Return c.Requests()
                 Case "request" : Return c.RequestAccess(New String(){"export"},"café – test")
                 Case "access-link" : Return c.AccessLink()
+                Case "enrol" : Return c.Enrol(S("token"))
+                Case "checkout" : Return c.Checkout(S("module"))
+                Case "checkin" : c.Checkin(S("module")) : Return Nothing
                 Case "record" : c.Record("export",True,0.125) : c.Record("export",False,0.025) : Return Nothing
                 Case Else : Throw New ArgumentException("unknown operation")
             End Select

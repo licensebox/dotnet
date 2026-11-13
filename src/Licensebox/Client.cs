@@ -16,6 +16,8 @@ public sealed class Config(string product,IReadOnlyDictionary<string,string> key
     public string Version { get; set; }="";
     public string? Server { get; set; }
     public string? Directory { get; set; }
+    /// A service account's one-time enrolment token; null reads LICENSEBOX_ENROL_TOKEN.
+    public string? EnrolToken { get; set; }
     public Action<string,string>? OnSignIn { get; set; }
     public Func<bool>? Cancelled { get; set; }
     /// Trusted platform/test seams. Never accept a binding from an end user.
@@ -75,6 +77,7 @@ public class Client : IDisposable
         var options=new Dictionary<string,object>{{"product",Argument(cfg.Product)},{"keys",cfg.Keys.ToDictionary(pair=>Argument(pair.Key),pair=>Argument(pair.Value))},{"version",Argument(cfg.Version)}};
         if(cfg.Server is {} server) options["server"]=Argument(server);
         if(cfg.Directory is {} directory)options["directory"]=Argument(directory);
+        if(cfg.EnrolToken is {} token)options["enrol_token"]=Argument(token);
         state=new State(cfg);var callbacks=state.Callbacks;
         int result=Native.lb_client_create_json(JsonSerializer.Serialize(options),ref callbacks,out handle);
         GC.KeepAlive(state);
@@ -129,6 +132,12 @@ public class Client : IDisposable
     public JsonElement Modules()=>Call("modules");
     public JsonElement Requests()=>Call("requests");
     public JsonElement RequestAccess(IEnumerable<string> modules,string note="")=>Call("request",new{modules=modules.Select(Argument).ToArray(),note=Argument(note)});
+    /// Enrols this machine as a service account with a one-time token.
+    public JsonElement Enrol(string token)=>Call("enrol",new{token=Argument(token)});
+    /// Checks a floating copy of the module out; Require does so by itself.
+    public JsonElement Checkout(string module)=>Call("checkout",new{module=Argument(module)});
+    /// Returns floating copies of the modules, or every copy with none named.
+    public void Checkin(params string[] modules)=>Call("checkin",new{modules=modules.Select(Argument).ToArray()});
     public string AccessLink()=>Call("access-link").GetString()??throw new LicenseboxException("protocol_error","invalid access link");
     public void Record(string command,bool success,double elapsedSeconds) {if(!double.IsFinite(elapsedSeconds)||elapsedSeconds<0)throw new ArgumentException("invalid elapsed time");Call("record",new{command=Argument(command),success,elapsed=elapsedSeconds});}
     public void Dispose(){lock(mutex){if(busy)throw new InvalidOperationException("callbacks must not reenter the client");if(handle!=IntPtr.Zero){Native.lb_client_destroy(handle);handle=IntPtr.Zero;}GC.SuppressFinalize(this);}}

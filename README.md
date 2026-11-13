@@ -36,7 +36,7 @@ client.Require("export");
 ```
 
 Build a local package with `dotnet pack src/Licensebox/Licensebox.csproj -c Release
--o packages`, then add `Licensebox` 0.3.0 from that package directory to the
+-o packages`, then add `Licensebox` 0.4.0 from that package directory to the
 consumer. NuGet registry publication is separate. Results are owned
 `System.Text.Json.JsonElement` values. Catch `LicenseboxException` and inspect
 `Code`. Use `using`/`Dispose`; calls and disposal are synchronized. F# and VB.NET consume the same assembly and each run the shared licensing suite in CI.
@@ -97,3 +97,18 @@ Use `client.Heartbeat("core")` in C#, F# and Visual Basic for an explicit bounde
 Default Client/Lease/Require behavior is unchanged. No timer, task, thread or background heartbeat starts automatically. The application owns event-loop scheduling/checkpoints on the language runtime thread, and safe cancellation of protected work on refusal or the last verified expiry deadline. A failed check cannot extend that deadline. This is especially important for MATLAB, Wolfram/JLink and other runtimes whose callbacks must stay on their owning thread. The matching native C heartbeat API/contract is required.
 
 Validate the feature against the candidate native core with `python3 ../protocol/conformance/heartbeat.py --adapter bash ci/adapter.sh` in addition to the existing full shared suite.
+
+## Seats per module, floating copies and service accounts
+
+Calls: `Enrol(token)`, `Checkout(module)`, `Checkin(params modules)`, and `Config.EnrolToken`; F# and Visual Basic use the same assembly.
+
+A module can have seats of its own: on a machine without its seat the lease
+names it in `elsewhere`, requiring it fails with `module_denied`, and an
+explicit sign-in moves the seat here. A customer can hold a pool of floating
+copies of a module, named in the lease's `floating`: requiring such a module
+checks a copy out (`no_free_copy` when every copy is in use), heartbeats keep
+it, and checking in returns it. A crashed application's copy is freed when
+the heartbeat grace passes. A server or build runner licensed as a service
+account sets the one-time token an admin issued as `LICENSEBOX_ENROL_TOKEN`
+or the `enrol_token` option: its first lease enrols the machine without a
+browser (`invalid_token` when the token is used or expired).
